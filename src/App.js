@@ -6,16 +6,20 @@ import axios from 'axios';
 import { tsConstructorType } from '@babel/types';
 const API_ENDPOINT = 'https://swapi.co/api/people/1/';
 
+function urlForID(id) {
+  return `https://swapi.co/api/people/${id}/`
+}
 
 class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      name: 'not the name'
+      name: '',
+      currentID: 1
     }
   }
   componentDidMount(){
-    axios.get(API_ENDPOINT)
+    axios.get(urlForID(this._getNextCharacter()))
     .then(response => {
         console.log(response.data.name);
         this.setState({
@@ -28,12 +32,25 @@ class App extends React.Component {
       return (
         <div className="App">
           <header className="App-header">
-            {this.state.name}
+            {
+            this.state.name ?
+              this.state.name
+              :
+              <img src={logo}/>
+          }
+          <button onClick={this._getNextCharacter}>%%%%%%%%%%%</button>
           </header>
         </div>
       );
   }
-  
+  _getNextCharacter = () => {
+    this.setState({
+      currentID: this.state.currentID + 1
+    }, () => {
+      return (this.state.currentID)
+      // console.log(`New currentID is ${this.state.currentID}`)
+    });
+  }
 };
 
 
